@@ -38,8 +38,9 @@ def edit(self, key, value):
 
 # File encryption
 def encrypt(filename, key):
+    #pass an extra variable containing the info we are sending .dumps
     f = Fernet(key)
-    with open(filename, "rb") as file:
+    with open(filename, "rb") as file: 
         # read all file data
         file_data = file.read()
     # encrypt data
@@ -64,11 +65,13 @@ def serialise_dictionary(self, serialization):
             f.write(xml_content)
             f.close()
             print('Dictionary serialised as XML. Filename: xml')
+            #we do not need to write to files, we can return either JSON, pickle or XML
 
 def display_dictionary(self):
     print(self.dictionary)
 
 # Send file to server
+# instead of filename, we pass the information directly to that function
 def send_file(self, filename, encrypted_data):
     filesize = os.path.getsize(filename)
     self.client.send(f"{filename} \ {filesize} \ {encrypted_data}".encode())
