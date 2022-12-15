@@ -12,14 +12,14 @@ def connect_server(self):
     s = socket.socket()
     print('Socket created')
     s.bind((Config.server_address, Config.port_number))
-    s.listen(3)
+    s.listen(3) # take it out or put it into the config file (config.timeout(3))
     print('Waiting for connections')
     while self.running:
         c, addr = s.accept()
-        name = c.recv(1024).decode()
+        name = c.recv(1024).decode() # put the number into the config file 
         print("connected with ", addr, name)
         data = c.recv(1024).decode()
-        c.send(bytes('Welcome to the dictionary', 'utf-8'))
+        c.send(bytes('Welcome to the dictionary', 'utf-8')) # messages into the config file
 
 
 # Server disconnection
@@ -31,6 +31,7 @@ def disconnect_server(self):
 
 
 # Decoding file from client
+# send the information we received directly - the same as the client
 def decode_file(filename, key):
     f = Fernet(key)
     with open(filename, "rb") as file:
@@ -43,6 +44,8 @@ def decode_file(filename, key):
         file.write(decrypted_data)
 
 # Save file from client
+# do not save file - only write to a file if it is in the config file. DO NOT USE FILES unless it is in the config file!!! print a screen or write to file
+# config option
 def save_file(self, encrypted_data, filename):
     directory_name = 'received_files'
     if not os.path.exists(directory_name):
