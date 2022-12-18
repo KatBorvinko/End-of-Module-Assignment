@@ -2,17 +2,17 @@ import json
 import os
 import pickle
 import dict2xml as dict2xml
-import Config
+import config
 import socket
 from dict2xml import dict2xml
 from cryptography.fernet import Fernet
-COUNTRIES = Config.countries
+COUNTRIES = config.countries
 
 # Server connection
 def connect_to_server(self):
     s = socket.socket()
     client = socket.socket()
-    client.connect((Config.server_address, Config.port_number))
+    client.connect((config.server_address, config.port_number))
     name = input("Enter your name, please: ")
     client.send(bytes(name, 'utf-8'))
     data = input("Please type dictionary: ")
@@ -51,11 +51,11 @@ def encrypt(filename, key):
 
 # Serialization/ pickle file
 def serialise_dictionary(self, serialization):
-    if Config.serialization_option == "JSON":
+    if config.serialization_option == "JSON":
         with open('dico.json', 'w') as f:
             json.dump(self.dictionary, f)
             print('Dictionary serialised. Filename: JSON')
-    elif Config.serialization_option == "BINARY":
+    elif config.serialization_option == "BINARY":
         with open('dico.bin', 'wb') as f:
             pickle.dump(self.dictionary, f)
             print('Dictionary serialised. Filename: Binary')
@@ -77,7 +77,7 @@ def send_file(self, filename, encrypted_data):
     self.client.send(f"{filename} \ {filesize} \ {encrypted_data}".encode())
     with open(filename, "rb") as file:
         while True:
-            bytes_read = file.read(Config.Buffer_size)
+            bytes_read = file.read(config.Buffer_size)
             if not bytes_read:
                 break
             self.client_socket.sendall(bytes_read)
